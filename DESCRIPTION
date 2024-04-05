@@ -1,0 +1,20 @@
+Package: CubicSmoothingSplines
+Type: Package
+Title: Testing with cubic smoothing splines
+Version: 0.1.0
+Authors@R: c(
+     person("Jyrki", "Mottonen", email = "jyrki.mottonen@helsinki.fi", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-6270-2556")),
+     person("Tapio", "Nummi", email = "tapio.nummi@tuni.fi", role = c("aut"),
+           comment = c(ORCID = "0000-0001-8682-6951"))
+           )
+Description: Statistical inference of cubic smoothing splines and semi-parametric regression. 
+License: GPL (>= 3)  + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1
+Depends: 
+    R (>= 3.5.0)
+LazyData: true
+URL: https://github.com/jymottonen/CubicSmoothingSplines
+BugReports: https://github.com/jymottonen/CubicSmoothingSplines/issues
