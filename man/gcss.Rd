@@ -4,7 +4,17 @@
 \alias{gcss}
 \title{Testing of spline growth curve model}
 \usage{
-gcss(Y, A = NULL, grp = NULL, t = 1:dim(Y)[1], model = "unif")
+gcss(
+  Y,
+  A = NULL,
+  grp = NULL,
+  t = 1:dim(Y)[1],
+  alpha = NULL,
+  alpha.min = 0.1,
+  alpha.max = 1000,
+  c = NULL,
+  model = "unif"
+)
 }
 \arguments{
 \item{Y}{a \eqn{q\times n} matrix of response vectors. The \eqn{i}th column contains the
@@ -19,6 +29,15 @@ The \eqn{n\times m} between-individual design matrix \code{A} is constructed usi
 The \eqn{i}th row of \code{A} is a unit vector with 1 in position \code{grp[i]} and zeros elsewhere.}
 
 \item{t}{a \eqn{q}-dimensional vector of the time points.}
+
+\item{alpha}{fixed value of \eqn{alpha}. If it is not given, \eqn{alpha} is estimated using gcv criteria.
+The minimum of gcv criteria is found using grid search.}
+
+\item{alpha.min}{the lower bound of grid of \eqn{alpha} values when estimating \eqn{alpha} using gcv criteria.}
+
+\item{alpha.max}{the upper bound of grid of \eqn{alpha} values when estimating \eqn{alpha} using gcv criteria.}
+
+\item{c}{fixed value of the number of eigenvectors.}
 
 \item{model}{covariance structure. The default "unif" assumes the uniform covariance structure
 \eqn{R = d^2 1_q1_q'+I_q}.}

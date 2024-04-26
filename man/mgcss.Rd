@@ -2,37 +2,58 @@
 % Please edit documentation in R/mgcss.R
 \name{mgcss}
 \alias{mgcss}
-\title{Testing of spline growth curve model}
+\title{Testing of multivariate spline growth curve model}
 \usage{
-mgcss(Y, A = NULL, grp = NULL, model = "unif")
+mgcss(
+  Y,
+  s,
+  A = NULL,
+  grp = NULL,
+  t = 1:(dim(Y)[1]/s),
+  alpha = NULL,
+  alpha.min = 0.1,
+  alpha.max = 1000,
+  model = "unif"
+)
 }
 \arguments{
-\item{Y}{a qxn matrix of response vectors. The ith column contains the q-variate response vector
-of the ith individual. The jth row contains the responses of the individuals in the jth time point.}
+\item{Y}{a \eqn{qs\times n} matrix of the vectors of measurements of \eqn{s} responses.}
 
-\item{A}{an nxm between-individual design matrix. You should give either \code{A} or \code{grp}, not both.}
+\item{s}{number of responses.}
 
-\item{grp}{an n-dimensional vector giving the m treatment groups of the observations.
-The nxm between-individual design matrix \code{A} is constructed using the values of this vector:
-The ith row of \code{A} is a unit vector with 1 in position \code{grp[i]} and zeros elsewhere.}
+\item{A}{an \eqn{n\times m} between-individual design matrix. You should give either \eqn{A} or \eqn{grp}, not both.}
 
-\item{model}{covariance structure. The default "unif" assumes the uniform covariance structure
-\eqn{R = d^2 1_q1_q'+I_q}.}
+\item{grp}{an \eqn{n}-dimensional vector giving the \eqn{m} treatment groups of the observations.
+The \eqn{n\times m} between-individual design matrix \eqn{A} is constructed using the values of this vector:
+The \eqn{i}th row of \eqn{A} is a unit vector with 1 in position \eqn{grp[i]} and zeros elsewhere.}
+
+\item{t}{a \eqn{q}-dimensional vector of the time points.}
+
+\item{alpha}{an \eqn{s}-dimensional vector of fixed values of \eqn{\alpha}. If it is not given, \eqn{\alpha}s are estimated using gcv criteria.
+The minimum of gcv criteria is found using grid search.}
+
+\item{alpha.min}{the lower bound of grid of \eqn{\alpha} values when estimating \eqn{\alpha} using gcv criteria.}
+
+\item{alpha.max}{the upper bound of grid of \eqn{\alpha} values when estimating \eqn{\alpha} using gcv criteria.}
+
+\item{model}{covariance structure. The default "unif" assumes the multivariate version of the
+uniform covariance structure \eqn{R = (I_s\otimes 1_q)D(I_s\otimes 1_q)'+I_{qs}}.}
 }
 \value{
 A list containing the following components:
 \describe{
 \item{F.value}{the observed value of the F test statistic.}
+\item{df1}{the degrees of freedom of the numerator of the F test statistic.}
+\item{df2}{the degrees of freedom of the denominator of the F test statistic.}
 \item{p.value}{approximate p-value.}
-\item{p.perm}{permutation test p-value.}
-\item{alpha}{the value of alpha.}
-\item{c}{the value of c.}
-\item{Ghat}{the spline fit.}
+\item{sigmahat2}{estimate of \eqn{\sigma^2}.}
+\item{alpha}{the value of \eqn{\alpha}.}
+\item{c}{the value of the number of eigenvectors \eqn{c}.}
 \item{Gtilde}{the approximated spline fit.}
 }
 }
 \description{
-\code{mgcss} is used to test the mean growth curves using cubic smoothing splines.
+\code{mgcss} is used to test the mean growth curves using multivariate cubic smoothing splines.
 }
 \details{
 Here are the details of the function...

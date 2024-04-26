@@ -11,6 +11,11 @@
 #' The \eqn{n\times m} between-individual design matrix \code{A} is constructed using the values of this vector:
 #' The \eqn{i}th row of \code{A} is a unit vector with 1 in position \code{grp[i]} and zeros elsewhere.
 #' @param t a \eqn{q}-dimensional vector of the time points.
+#' @param alpha fixed value of \eqn{alpha}. If it is not given, \eqn{alpha} is estimated using gcv criteria. 
+#' The minimum of gcv criteria is found using grid search.
+#' @param alpha.min the lower bound of grid of \eqn{alpha} values when estimating \eqn{alpha} using gcv criteria.
+#' @param alpha.max the upper bound of grid of \eqn{alpha} values when estimating \eqn{alpha} using gcv criteria.
+#' @param c fixed value of the number of eigenvectors.
 #' @param model covariance structure. The default "unif" assumes the uniform covariance structure
 #' \eqn{R = d^2 1_q1_q'+I_q}. 
 #' @details 
@@ -29,7 +34,7 @@
 #' }
 #' @importFrom stats pf
 #' @export
-gcss<-function(Y, A=NULL, grp=NULL, t=1:dim(Y)[1], model="unif")
+gcss<-function(Y, A=NULL, grp=NULL, t=1:dim(Y)[1], alpha=NULL, alpha.min=0.1, alpha.max=1000, c=NULL, model="unif")
 {
   if(is.null(A)&is.null(grp))
     stop("You should give A or grp")
@@ -46,16 +51,23 @@ gcss<-function(Y, A=NULL, grp=NULL, t=1:dim(Y)[1], model="unif")
       A[grp==groups[j],j]<-1
     }
   }
-  
+  print(A)
   q<-nrow(Y)
   n<-ncol(Y)
   m<-ncol(A)
   K<-roughness(t)
   
-  gcv.res<-gcv.alpha(Y,t,A,alpha.min=1,alpha.max=10000,len=100)
-  if(gcv.res$minpoint==FALSE)
-    print("The minimum point of gcv was not found!")
-  alpha<-gcv.res$alpha.hat
+  if(is.null(alpha))
+  {
+    #Estimation of alpha using gcv criteria
+    gcv.res<-gcv.alpha(Y,t,A,alpha.min=alpha.min,alpha.max=alpha.max,len=100)
+    if(gcv.res$minpoint==(-1))
+      cat("The minimum gcv was found at the point alpha.min=",alpha.min,"\n")
+    if(gcv.res$minpoint==1)
+      cat("The minimum gcv was found at the point alpha.max=",alpha.max,"\n")
+    alpha<-gcv.res$alpha.hat
+  }
+
   S<-solve(diag(q)+alpha*K)
   
   Ghat<-S%*%Y%*%A%*%solve(t(A)%*%A)
@@ -67,7 +79,11 @@ gcss<-function(Y, A=NULL, grp=NULL, t=1:dim(Y)[1], model="unif")
   M[,1]<-m1
   M[,2]<-m2
   
-  c<-gcv.dim(Y,A,M)
+  if(is.null(c))
+  {
+    #Esimation of the number of eigenvectors c using gcv criteria
+    c<-gcv2.dim(Y,A,M)$c
+  }
   
   Mstar<-M[,1:c]
   Pm<-Mstar%*%t(Mstar)
@@ -101,7 +117,8 @@ gcss<-function(Y, A=NULL, grp=NULL, t=1:dim(Y)[1], model="unif")
   }
   FF2
   p.perm<-mean(FF2>=FF)
-  res<-list(F.value=FF,df1=df1,df2=df2,p.value=p.value,p.perm=p.perm,alpha=alpha,c=c,Ghat=Ghat,Gtilde=Gtilde)
+  res<-list(F.value=FF,df1=df1,df2=df2,p.value=p.value,p.perm=p.perm,
+            alpha=alpha,c=c,Ghat=Ghat,Gtilde=Gtilde)
   class(res) <- "gcss"
   return(res)
 }

@@ -2,9 +2,9 @@
 % Please edit documentation in R/utils.R
 \name{gcv.alpha}
 \alias{gcv.alpha}
-\title{Generalized cross-validation}
+\title{Generalized cross-validation estimate of the smoothing parameter (growth data model)}
 \usage{
-gcv.alpha(Y, x, A, alpha.min, alpha.max, len = 20)
+gcv.alpha(Y, x, A, alpha.min, alpha.max, len = 100)
 }
 \arguments{
 \item{Y}{a \eqn{q \times n} matrix of independent \eqn{q \times 1} response vectors.}
@@ -27,9 +27,7 @@ A list containing the following components:
 \item{alpha.hat}{the alpha value that corresponds to the minimum of gcv.}
 \item{ind.min}{the index of alpha that corresponds to the minimum of gcv.}
 \item{ind.min}{the index of alpha that corresponds to the minimum of gcv.}
-\item{minpoint}{a logical value. If TRUE, the minimum of gcv was found at
-\eqn{alpha[ind.min]}, where \eqn{1<ind.min<length(alpha)}. If FALSE, the
-minimum of gcv was found at \eqn{alpha[1]} or \eqn{alpha[length(alpha)]}.}
+\item{minpoint}{Returns \eqn{0} if \eqn{1<ind.min<length(alpha)}, \eqn{-1} if \eqn{ind.min=1} and \eqn{+1} if \eqn{ind.min=length(alpha)}.}
 }
 }
 \description{

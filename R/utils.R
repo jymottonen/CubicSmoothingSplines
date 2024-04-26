@@ -40,7 +40,7 @@ roughness<-function(x)
   return(roughness)
 }
 
-#' Generalized cross-validation
+#' Generalized cross-validation estimate of the smoothing parameter (growth data model)
 #'
 #' \code{gcv.alpha} estimates the smoothing parameter \eqn{\alpha} by using generalized cross-validation criteria
 #'
@@ -59,12 +59,10 @@ roughness<-function(x)
 #' \item{alpha.hat}{the alpha value that corresponds to the minimum of gcv.}
 #' \item{ind.min}{the index of alpha that corresponds to the minimum of gcv.}
 #' \item{ind.min}{the index of alpha that corresponds to the minimum of gcv.}
-#' \item{minpoint}{a logical value. If TRUE, the minimum of gcv was found at  
-#' \eqn{alpha[ind.min]}, where \eqn{1<ind.min<length(alpha)}. If FALSE, the 
-#' minimum of gcv was found at \eqn{alpha[1]} or \eqn{alpha[length(alpha)]}.}
+#' \item{minpoint}{Returns \eqn{0} if \eqn{1<ind.min<length(alpha)}, \eqn{-1} if \eqn{ind.min=1} and \eqn{+1} if \eqn{ind.min=length(alpha)}.}
 #' }
 #' @keywords internal
-gcv.alpha<-function(Y,x,A,alpha.min,alpha.max,len=20)
+gcv.alpha<-function(Y,x,A,alpha.min,alpha.max,len=100)
 {
   n<-ncol(Y)
   m<-ncol(A)
@@ -83,36 +81,71 @@ gcv.alpha<-function(Y,x,A,alpha.min,alpha.max,len=20)
     gcv[i]<-(1/(n*q))*trDD/(1-m*edf/(n*q))^2
   }
   ind.min<-which.min(gcv)
-  minpoint<-TRUE
-  if((ind.min==1)|(ind.min==len))
-    minpoint<-FALSE
+  minpoint<-0
+  if(ind.min==1)
+    minpoint <- -1
+  if(ind.min==len)
+    minpoint <- 1
   alpha.hat<-alpha[ind.min]
-  plot(alpha,gcv,type="l")
-  abline(v=alpha.hat,lty=2)
   res<-list(gcv=gcv,alpha=alpha,alpha.hat=alpha.hat,ind.min=ind.min,minpoint=minpoint)
   return(res)
 }
 
-
-#' Generalized cross-validation
+#' Generalized cross-validation (cubic smoothing splines)
 #'
-#' \code{gcv.dim} estimates the number of eigenvectors by using generalized cross-validation criteria
+#' \code{gcv1.dim} estimates the number of eigenvectors by using generalized cross-validation criteria (cubic smoothing splines)
 #'
 #' @param Y a \eqn{q \times n} matrix of independent \eqn{q \times 1} response vectors.
 #' @param A an \eqn{n \times m} between-individual design matrix.
 #' @param M matrix of eigenvectors of \code{S}.
 #' @details 
 #' Here are the details of the function...
-#' @return the number of eigenvectors.
+#' @return A list containing the following components:
+#' \describe{
+#' \item{c}{the number of eigenvectors.}
+#' \item{gcv}{the values of the gcv criteria.}
+#' }
 #' @keywords internal
-gcv.dim<-function(Y,A,M)
+gcv1.dim<-function(y,Tn)
+{
+  n<-length(y)
+  gcv<-NULL
+  for(i in 1:(n-1))
+  {
+    Mc<-Tn[,1:i]%*%t(Tn[,1:i])
+    ss<-mean((y-Mc%*%y)^2)
+    gcv[i]<-ss/(1-(i/n))^2
+  }
+  ind.min<-which.min(gcv)
+  c<-(1:n)[ind.min]
+  res<-list(c=c,gcv=gcv)
+  return(res)
+}
+
+#' Generalized cross-validation estimate of the number of eigenvectors (growth data model)
+#'
+#' \code{gcv2.dim} estimates the number of eigenvectors by using generalized cross-validation criteria (growth data model)
+#'
+#' @param Y a \eqn{q \times n} matrix of independent \eqn{q \times 1} response vectors.
+#' @param A an \eqn{n \times m} between-individual design matrix.
+#' @param M matrix of eigenvectors of \code{S}.
+#' @details 
+#' Here are the details of the function...
+#' @return A list containing the following components:
+#' \describe{
+#'   \item{c}{the estimated number of eigenvectors.}
+#'   \item{c.grid}{the grid of the number of eigenvectors for the gcv criteria.}
+#'   \item{gcv}{the gcv values at the points \eqn{c.grid}}
+#' }
+#' @keywords internal
+gcv2.dim<-function(Y,A,M)
 {
   n<-ncol(Y)
   q<-nrow(Y)
   m<-ncol(A)
   Pa<-A%*%solve(t(A)%*%A)%*%t(A)
   gcv<-NULL
-  for(i in 1:q)
+  for(i in 3:(q-1))
   {
     Ti<-M[,1:i]%*%t(M[,1:i])
     Yhat<-Ti%*%Y%*%Pa
@@ -121,7 +154,8 @@ gcv.dim<-function(Y,A,M)
     gcv[i]<-(1/(n*q))*trDD/(1-m*i/(n*q))^2
   }
   ind.min<-which.min(gcv)
-  cc<-(1:q)[ind.min]
-  res<-cc
+  c<-(1:(q-1))[ind.min]
+  res<-list(c=c,c.grid=(3:(q-1)),gcv=gcv)
   return(res)
 }
+
