@@ -1,7 +1,7 @@
 Package: CubicSmoothingSplines
 Type: Package
 Title: Testing with cubic smoothing splines
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
      person("Jyrki", "Mottonen", email = "jyrki.mottonen@helsinki.fi", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-6270-2556")),
