@@ -7,11 +7,9 @@
 gcv1.dim(y, Tn)
 }
 \arguments{
-\item{Y}{a \eqn{q \times n} matrix of independent \eqn{q \times 1} response vectors.}
+\item{y}{an \eqn{n}dimensional vector of responses.}
 
-\item{A}{an \eqn{n \times m} between-individual design matrix.}
-
-\item{M}{matrix of eigenvectors of \code{S}.}
+\item{Tn}{an \eqn{n \times n} matrix of eigenvectors of \eqn{S_{\alpha}=(I_n+\alpha K)^{-1}}.}
 }
 \value{
 A list containing the following components:

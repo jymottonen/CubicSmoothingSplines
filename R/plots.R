@@ -32,64 +32,41 @@ plot.css<-function(x, xlab="x", ylab="y", xlim=c(min(x$x),max(x$x)), ylim=c(min(
 #'
 #' Plot method for objects of class "gcss". 
 #'
-#' @param x an object of class gcss.
+#' @param x an object of class gcss2.
 #' @param t a \eqn{q}-dimensional vector of the time points.
 #' @param xlab a title for the x axis.
 #' @param ylab a title for the y axis.
+#' @param legend.plot logical. If TRUE, legend is added to the topright corner.
+#' @param inset.x if legend.plot=TRUE, sets the distance of the legend from the right margin 
+#' as a fraction of the plot region. 
 #' @param ... further arguments passed to or from other methods.
 #' @details 
 #' Here are the details of the function...
 #' @importFrom grDevices dev.off pdf
-#' @importFrom graphics abline axis lines points title
+#' @importFrom graphics abline axis lines points title par legend
 #' @export
-plot.gcss<-function(x, t=1:dim(x$Gtilde)[1], xlab="Time points", ylab="Gtilde", ...)
-{
-  q<-nrow(x$Gtilde)
-  m<-ncol(x$Gtilde)
-  
-  ymin<-min(x$Gtilde)
-  ymax<-max(x$Gtilde)
-  
-  plot(t,x$Gtilde[,1],type="l", ylim=c(ymin,ymax), xlab=xlab, ylab=ylab)
-  for(i in 2:m)
-  {
-    points(t,x$Gtilde[,i],type="l",lty=i)
-  }
-}
-
-
-#' plot.mgcss
-#'
-#' Plot method for objects of class "mgcss". 
-#'
-#' @param x an object of class mgcss.
-#' @param t a \eqn{q}-dimensional vector of the time points.
-#' @param xlab a title for the x axis.
-#' @param ylab a title for the y axis.
-#' @param ... further arguments passed to or from other methods.
-#' @details 
-#' Here are the details of the function...
-#' @importFrom grDevices dev.off pdf
-#' @importFrom graphics abline axis lines points title par
-#' @export
-plot.mgcss<-function(x, t=1:dim(x$Gtilde[[1]])[1], xlab="Time points", ylab="Gtilde", ...)
+plot.gcss<-function(x, t=1:dim(x$Gtilde[[1]])[1], xlab="Time points", ylab="Gtilde", 
+                     legend.plot=FALSE, inset.x=-0.2, ...)
 {
   s<-length(x$Gtilde)
   q<-nrow(x$Gtilde[[1]])
   m<-ncol(x$Gtilde[[1]])
   
-  #op<-par(mar=c(1,1,1,1))
-  par(ask=TRUE)
+  op <- par(no.readonly = TRUE)
+  if(legend.plot)par(mar=c(5, 4, 4, 8), xpd=TRUE)
+  if(s>1)par(ask=TRUE)
   for(j in 1:s)
   {
-    plot(t,x$Gtilde[[j]][,1],type="l", xlab=xlab, ylab=ylab)
+    plot(t,x$Gtilde[[j]][,1],type="l", xlab=xlab, ylab=ylab, lty=1, col=1)
     for(i in 2:m)
     {
-      points(t,x$Gtilde[[j]][,i],type="l",lty=i)
+      points(t,x$Gtilde[[j]][,i],type="l",lty=i,col=i)
+    }
+    if(legend.plot){
+      legend.labels<-paste("Group",1:m)
+      legend(x = "topright", inset=c(inset.x, 0), lty = 1:m, col= 1:m, legend=legend.labels) 
     }
   }
-  par(ask=FALSE)
-  #par(op)
+ if(s>1)par(ask=FALSE)
+ par(op)
 }
-
-

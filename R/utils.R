@@ -95,9 +95,8 @@ gcv.alpha<-function(Y,x,A,alpha.min,alpha.max,len=100)
 #'
 #' \code{gcv1.dim} estimates the number of eigenvectors by using generalized cross-validation criteria (cubic smoothing splines)
 #'
-#' @param Y a \eqn{q \times n} matrix of independent \eqn{q \times 1} response vectors.
-#' @param A an \eqn{n \times m} between-individual design matrix.
-#' @param M matrix of eigenvectors of \code{S}.
+#' @param y an \eqn{n}dimensional vector of responses.
+#' @param Tn an \eqn{n \times n} matrix of eigenvectors of \eqn{S_{\alpha}=(I_n+\alpha K)^{-1}}.
 #' @details 
 #' Here are the details of the function...
 #' @return A list containing the following components:
@@ -128,13 +127,12 @@ gcv1.dim<-function(y,Tn)
 #'
 #' @param Y a \eqn{q \times n} matrix of independent \eqn{q \times 1} response vectors.
 #' @param A an \eqn{n \times m} between-individual design matrix.
-#' @param M matrix of eigenvectors of \code{S}.
+#' @param M matrix of eigenvectors of the smoother matrix \eqn{S=(I_q+\alpha K)^{-1}}.
 #' @details 
 #' Here are the details of the function...
 #' @return A list containing the following components:
 #' \describe{
 #'   \item{c}{the estimated number of eigenvectors.}
-#'   \item{c.grid}{the grid of the number of eigenvectors for the gcv criteria.}
 #'   \item{gcv}{the gcv values at the points \eqn{c.grid}}
 #' }
 #' @keywords internal
@@ -145,7 +143,7 @@ gcv2.dim<-function(Y,A,M)
   m<-ncol(A)
   Pa<-A%*%solve(t(A)%*%A)%*%t(A)
   gcv<-NULL
-  for(i in 3:(q-1))
+  for(i in 1:(q-1))
   {
     Ti<-M[,1:i]%*%t(M[,1:i])
     Yhat<-Ti%*%Y%*%Pa
@@ -155,7 +153,7 @@ gcv2.dim<-function(Y,A,M)
   }
   ind.min<-which.min(gcv)
   c<-(1:(q-1))[ind.min]
-  res<-list(c=c,c.grid=(3:(q-1)),gcv=gcv)
+  res<-list(c=c,gcv=gcv)
   return(res)
 }
 

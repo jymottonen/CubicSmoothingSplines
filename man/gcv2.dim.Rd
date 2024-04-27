@@ -11,13 +11,12 @@ gcv2.dim(Y, A, M)
 
 \item{A}{an \eqn{n \times m} between-individual design matrix.}
 
-\item{M}{matrix of eigenvectors of \code{S}.}
+\item{M}{matrix of eigenvectors of the smoother matrix \eqn{S=(I_q+\alpha K)^{-1}}.}
 }
 \value{
 A list containing the following components:
 \describe{
 \item{c}{the estimated number of eigenvectors.}
-\item{c.grid}{the grid of the number of eigenvectors for the gcv criteria.}
 \item{gcv}{the gcv values at the points \eqn{c.grid}}
 }
 }

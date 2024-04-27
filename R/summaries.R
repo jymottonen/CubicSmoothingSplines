@@ -61,26 +61,3 @@ summary.gcss<-function(object, ..., digits=3)
   cat("The number of eigenvectors c:",object$c,"\n\n")
   print(test.table)
 }
-
-
-#' summary.mgcss
-#'
-#' summary.mgcss is used to print the summary of the
-#' testing of spline growth curve model.
-#'
-#' @param object an object of class gcss.
-#' @param ... further arguments passed to or from other methods.
-#' @param digits minimal number of significant digits.
-#' @details 
-#' Here are the details of the function...
-#' @export
-summary.mgcss<-function(object, ..., digits=3)
-{
-  test.table<-cbind(object$F.value,object$df1,object$df2,object$p.value)
-  colnames(test.table)<-c("F-value","df1","df2","p-value")
-  rownames(test.table)<-c("")
-  cat("Testing of multivariate spline growth curve model\n\n")
-  cat("The smoothing parameter alpha:",object$alpha,"\n")
-  cat("The number of eigenvectors c:",object$c,"\n\n")
-  print(test.table)
-}

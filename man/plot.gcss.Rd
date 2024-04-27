@@ -4,16 +4,29 @@
 \alias{plot.gcss}
 \title{plot.gcss}
 \usage{
-\method{plot}{gcss}(x, t = 1:dim(x$Gtilde)[1], xlab = "Time points", ylab = "Gtilde", ...)
+\method{plot}{gcss}(
+  x,
+  t = 1:dim(x$Gtilde[[1]])[1],
+  xlab = "Time points",
+  ylab = "Gtilde",
+  legend.plot = FALSE,
+  inset.x = -0.2,
+  ...
+)
 }
 \arguments{
-\item{x}{an object of class gcss.}
+\item{x}{an object of class gcss2.}
 
 \item{t}{a \eqn{q}-dimensional vector of the time points.}
 
 \item{xlab}{a title for the x axis.}
 
 \item{ylab}{a title for the y axis.}
+
+\item{legend.plot}{logical. If TRUE, legend is added to the topright corner.}
+
+\item{inset.x}{if legend.plot=TRUE, sets the distance of the legend from the right margin
+as a fraction of the plot region.}
 
 \item{...}{further arguments passed to or from other methods.}
 }

@@ -2,45 +2,42 @@
 % Please edit documentation in R/gcss.R
 \name{gcss}
 \alias{gcss}
-\title{Testing of spline growth curve model}
+\title{Testing of multivariate spline growth curve model}
 \usage{
 gcss(
   Y,
+  s,
   A = NULL,
   grp = NULL,
-  t = 1:dim(Y)[1],
+  t = 1:(dim(Y)[1]/s),
   alpha = NULL,
   alpha.min = 0.1,
   alpha.max = 1000,
-  c = NULL,
   model = "unif"
 )
 }
 \arguments{
-\item{Y}{a \eqn{q\times n} matrix of response vectors. The \eqn{i}th column contains the
-\eqn{q}-variate response vector of the \eqn{i}th individual. The \eqn{j}th row contains the responses
-of the individuals in the \eqn{j}th time point.}
+\item{Y}{a \eqn{qs\times n} matrix of the vectors of measurements of \eqn{s} responses.}
 
-\item{A}{an \eqn{n\times m} between-individual design matrix. You should give either
-\code{A} or \code{grp}, not both.}
+\item{s}{number of responses.}
+
+\item{A}{an \eqn{n\times m} between-individual design matrix. You should give either \eqn{A} or \eqn{grp}, not both.}
 
 \item{grp}{an \eqn{n}-dimensional vector giving the \eqn{m} treatment groups of the observations.
-The \eqn{n\times m} between-individual design matrix \code{A} is constructed using the values of this vector:
-The \eqn{i}th row of \code{A} is a unit vector with 1 in position \code{grp[i]} and zeros elsewhere.}
+The \eqn{n\times m} between-individual design matrix \eqn{A} is constructed using the values of this vector:
+The \eqn{i}th row of \eqn{A} is a unit vector with 1 in position \eqn{grp[i]} and zeros elsewhere.}
 
 \item{t}{a \eqn{q}-dimensional vector of the time points.}
 
-\item{alpha}{fixed value of \eqn{alpha}. If it is not given, \eqn{alpha} is estimated using gcv criteria.
+\item{alpha}{an \eqn{s}-dimensional vector of fixed values of \eqn{\alpha}. If it is not given, \eqn{\alpha}s are estimated using gcv criteria.
 The minimum of gcv criteria is found using grid search.}
 
-\item{alpha.min}{the lower bound of grid of \eqn{alpha} values when estimating \eqn{alpha} using gcv criteria.}
+\item{alpha.min}{the lower bound of grid of \eqn{\alpha} values when estimating \eqn{\alpha} using gcv criteria.}
 
-\item{alpha.max}{the upper bound of grid of \eqn{alpha} values when estimating \eqn{alpha} using gcv criteria.}
+\item{alpha.max}{the upper bound of grid of \eqn{\alpha} values when estimating \eqn{\alpha} using gcv criteria.}
 
-\item{c}{fixed value of the number of eigenvectors.}
-
-\item{model}{covariance structure. The default "unif" assumes the uniform covariance structure
-\eqn{R = d^2 1_q1_q'+I_q}.}
+\item{model}{covariance structure. The default "unif" assumes the multivariate version of the
+uniform covariance structure \eqn{R = (I_s\otimes 1_q)D(I_s\otimes 1_q)'+I_{qs}}.}
 }
 \value{
 A list containing the following components:
@@ -50,14 +47,14 @@ A list containing the following components:
 \item{df2}{the degrees of freedom of the denominator of the F test statistic.}
 \item{p.value}{approximate p-value.}
 \item{p.perm}{permutation test p-value.}
+\item{sigmahat2}{estimate of \eqn{\sigma^2}.}
 \item{alpha}{the value of \eqn{\alpha}.}
-\item{c}{the value of c.}
-\item{Ghat}{the spline fit.}
+\item{c}{the value of the number of eigenvectors \eqn{c}.}
 \item{Gtilde}{the approximated spline fit.}
 }
 }
 \description{
-\code{gcss} is used to test the mean growth curves using cubic smoothing splines.
+\code{gcss} is used to test the mean growth curves using multivariate cubic smoothing splines.
 }
 \details{
 Here are the details of the function...
