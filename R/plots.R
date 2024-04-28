@@ -32,7 +32,7 @@ plot.css<-function(x, xlab="x", ylab="y", xlim=c(min(x$x),max(x$x)), ylim=c(min(
 #'
 #' Plot method for objects of class "gcss". 
 #'
-#' @param x an object of class gcss2.
+#' @param x an object of class gcss.
 #' @param t a \eqn{q}-dimensional vector of the time points.
 #' @param xlab a title for the x axis.
 #' @param ylab a title for the y axis.

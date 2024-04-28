@@ -2,7 +2,7 @@
 #'
 #' \code{roughness} is used to compute the roughness matrix. 
 #'
-#' @param x a \code{q}-dimensional vector of the time points.
+#' @param x a \eqn{q}-dimensional vector of the time points.
 #' @details 
 #' Here are the details of the function...
 #' @return A \eqn{q\times q} roughness matrix \eqn{K=\nabla\Delta^{-1}\nabla'}.
@@ -45,7 +45,7 @@ roughness<-function(x)
 #' \code{gcv.alpha} estimates the smoothing parameter \eqn{\alpha} by using generalized cross-validation criteria
 #'
 #' @param Y a \eqn{q \times n} matrix of independent \eqn{q \times 1} response vectors.
-#' @param x a \code{q}-dimensional vector of the time points.
+#' @param x a \eqn{q}-dimensional vector of the time points.
 #' @param A an \eqn{n \times m} between-individual design matrix.
 #' @param alpha.min the minimum value of the grid of \eqn{\alpha}s.
 #' @param alpha.max the maximum value of the grid of \eqn{\alpha}s.
