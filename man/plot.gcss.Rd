@@ -15,7 +15,7 @@
 )
 }
 \arguments{
-\item{x}{an object of class gcss2.}
+\item{x}{an object of class gcss.}
 
 \item{t}{a \eqn{q}-dimensional vector of the time points.}
 

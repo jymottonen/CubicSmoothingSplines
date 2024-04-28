@@ -127,7 +127,9 @@ gcss<-function(Y, s, A=NULL, grp=NULL, t=1:(dim(Y)[1]/s),
   
   Qstar<-sum(diag(COD%*%solve(t(D)%*%solve(t(A)%*%A)%*%D)%*%t(COD)))
   
-  df1<-(ctot-s)*(m-1)
+  nu<-nrow(COD)
+  g<-ncol(COD)
+  df1<-nu*g
   df2<-n*(s*q-ctot)
   
   FF<-(Qstar/df1)/sigmahat2

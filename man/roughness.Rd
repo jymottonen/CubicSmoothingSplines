@@ -7,7 +7,7 @@
 roughness(x)
 }
 \arguments{
-\item{x}{a \code{q}-dimensional vector of the time points.}
+\item{x}{a \eqn{q}-dimensional vector of the time points.}
 }
 \value{
 A \eqn{q\times q} roughness matrix \eqn{K=\nabla\Delta^{-1}\nabla'}.

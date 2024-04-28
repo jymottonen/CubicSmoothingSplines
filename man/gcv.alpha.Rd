@@ -9,7 +9,7 @@ gcv.alpha(Y, x, A, alpha.min, alpha.max, len = 100)
 \arguments{
 \item{Y}{a \eqn{q \times n} matrix of independent \eqn{q \times 1} response vectors.}
 
-\item{x}{a \code{q}-dimensional vector of the time points.}
+\item{x}{a \eqn{q}-dimensional vector of the time points.}
 
 \item{A}{an \eqn{n \times m} between-individual design matrix.}
 
